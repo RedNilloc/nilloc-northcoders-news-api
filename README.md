@@ -1,6 +1,20 @@
 # Northcoders News API
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+Hello, new developer friend! In order to properly connect to the two databases within this project, you will need to add two files:
+
+.env.development
+
+within which you should write "PGDATABASE=nc_news" (without quotations),
+
+and
+
+.env.test
+
+within which you should write "PGDATABASE=nc_news" (without quotations).
+
+I hope you enjoy this project!
+
+
 
 
 
