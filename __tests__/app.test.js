@@ -13,10 +13,6 @@ afterAll(() => {
 return db.end();
 }); 
 
-/* Set up your test imports here */
-
-/* Set up your beforeEach & afterAll functions here */
-
 describe("GET /api", () => {
   test("200: Responds with an object detailing the documentation for each endpoint", () => {
     return request(app)
@@ -35,9 +31,14 @@ describe("GET /api/topics", () => {
     .get('/api/topics')
     .expect(200)
     .then((response) => {
-      console.log(response.body)
-
+      expect(response.body.topics.length).toBe(3);
+      response.body.topics.forEach((topic) => {
+        expect(typeof topic.slug).toBe("string");
+        expect(typeof topic.description).toBe("string");
+      });
+      console.log(response.body.topics)
      });
- 
   });
 });
+
+
