@@ -36,9 +36,44 @@ describe("GET /api/topics", () => {
         expect(typeof topic.slug).toBe("string");
         expect(typeof topic.description).toBe("string");
       });
-      console.log(response.body.topics)
      });
   });
 });
 
+describe("GET /api/articles/:article_id", () => {
+  test("should respond with the correct article id", () => {
+    return request(app)
+    .get("/api/articles/3")
+    .expect(200)
+    .then((response) => {
+      expect(response.body.article).toEqual({
+      article_id: 3,
+      title: "Eight pug gifs that remind me of mitch",
+      topic: "mitch",
+      author: "icellusedkars",
+      body: "some gifs",
+      created_at: "2020-11-03T09:12:00.000Z",
+      votes: 0,
+      article_img_url:
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+});
+});
+});
+test("400 id is not a number", () => {
+  return request(app)
+    .get("/api/articles/poopis")
+    .expect(400)
+    .then((response) => {
+      expect(response.body.error).toBe("Bad Request");
+    });
+});
+  test("404 article not found", () => {
+    return request (app)
+    .get("/api/articles/9001")
+    .expect(404)
+    .then((response) => {
+      expect(response.body.error).toBe("Not found")
+    });
+  });
 
+});
