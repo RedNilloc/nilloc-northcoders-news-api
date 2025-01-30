@@ -1,13 +1,15 @@
 const express = require("express");
 const app = express();
-const { getEndpoints, getTopics, getArticleId } 
+const { getEndpoints, getTopics, getArticleId, getArticles } 
      = require("./controllers/controller")
 
 app.get("/api", getEndpoints);
 
 app.get("/api/topics", getTopics);
 
-app.get("/api/articles/:article_id", getArticleId)
+app.get("/api/articles/:article_id", getArticleId);
+
+app.get("/api/articles", getArticles);
 
 
 

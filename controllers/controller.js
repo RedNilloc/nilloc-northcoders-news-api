@@ -2,19 +2,19 @@ const app = require("../app.js");
 const endpoints = require("../endpoints.json")
 const devData = require("../db/data/development-data/index.js");
 const {
-    fetchTopics, fetchArticleId
+    fetchTopics, fetchArticleId, fetchArticles
 } = require("../models/model")
 
 
 const getEndpoints = (request, response) => {
     response.status(200).send({ endpoints });  
 
-}
+};
 const getTopics = (request, response, next) => {
     fetchTopics().then((topics) => {    
         response.status(200).send ({ topics });
     });
-}
+};
 const getArticleId = (request, response, next) => {
     const article_id = request.params.article_id;
 fetchArticleId(article_id).
@@ -25,5 +25,10 @@ then((article) => {
         next(err);
     });
 };
+const getArticles = (request, response, next) => {
+    fetchArticles().then((articles) => {
+        response.status(200).send ({articles});
+    });
+}
 
-module.exports = { getEndpoints, getTopics, getArticleId, }
+module.exports = { getEndpoints, getTopics, getArticleId, getArticles }
