@@ -19,7 +19,6 @@ describe("GET /api", () => {
       .get("/api")
       .expect(200)
       .then((response) => {
-        //console.log(response.body)
         expect(response.body.endpoints).toEqual(endpointsJson);
       });
   });
@@ -75,5 +74,24 @@ test("400 id is not a number", () => {
       expect(response.body.error).toBe("Not found")
     });
   });
-
+});
+describe("GET api/articles", () => {
+  test("GET: 200 sends an array of articles to the client", () => {
+  return request(app)
+  .get("/api/articles")
+  .expect(200)
+  .then((response) => {
+    expect(response.body.articles.length).toBe(13);
+    response.body.articles.forEach((article) => {
+      expect(typeof article.title).toBe("string");
+      expect(typeof article.topic).toBe("string");
+      expect(typeof article.author).toBe("string");
+      expect(typeof article.article_id).toBe("number");
+      expect(typeof article.created_at).toBe("string");
+      expect(typeof article.votes).toBe("number");
+      expect(typeof article.article_img_url).toBe("string");
+      expect(typeof article.body).toBe("undefined");
+    });    
+  });
+  });
 });

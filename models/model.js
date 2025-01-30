@@ -1,13 +1,13 @@
 const db = require("../db/connection");
 
 const fetchTopics = () => {
-return db.query('SELECT * FROM topics;').then((result) => {
+return db.query(`SELECT * FROM topics;`).then((result) => {
     return result.rows
 });
 };
 
 const fetchArticleId = (id) => {
-return db.query('SELECT * FROM articles WHERE article_id = $1', [id])
+return db.query(`SELECT * FROM articles WHERE article_id = $1`, [id])
 .then((result) => {
     const rows = result.rows
     if (rows.length === 0) {
@@ -18,6 +18,19 @@ return db.query('SELECT * FROM articles WHERE article_id = $1', [id])
 });
 };
 
+const fetchArticles = () => {
+    return db.query(`
+        SELECT articles.title, articles.topic, articles.author, 
+        articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url,
+          COUNT(articles.article_id) 
+          AS comment_count 
+          FROM articles 
+          LEFT JOIN comments ON comments.article_id = articles.article_id 
+          GROUP BY comments.article_id, articles.article_id
+          ORDER BY created_at DESC;`)
+    .then((result) => {
+        return result.rows
+    });
+}
 
-
-module.exports = { fetchTopics, fetchArticleId }    
+module.exports = { fetchTopics, fetchArticleId, fetchArticles }    
