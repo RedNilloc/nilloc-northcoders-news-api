@@ -93,5 +93,48 @@ describe("GET api/articles", () => {
       expect(typeof article.body).toBe("undefined");
     });    
   });
+  }); 
+});
+describe("GET api/articles/:article_id/comments", () => {
+test("GET: 200 sends an array of comments to the client", () => {
+return request(app)
+.get("/api/articles/3/comments")
+.expect(200)
+.then((response) => {
+
+  // console.log(response.body)
+  expect(response.body.comment).toEqual([{
+    comment_id: 11,
+    body: "Ambidextrous marsupial",
+    votes: 0,
+    author: "icellusedkars",
+    article_id: 3,
+    created_at: "2020-09-19T23:10:00.000Z",
+},
+{ 
+  comment_id: 10,
+  body: "git push origin master",
+  votes: 0,
+  author: "icellusedkars",
+  article_id: 3,
+  created_at: "2020-06-20T07:24:00.000Z",
+}]);
+});
+});
+test("400 id is not a number", () => {
+  return request(app)
+    .get("/api/articles/peepis/comments")
+    .expect(400)
+    .then((response) => {
+      expect(response.body.error).toBe("Bad Request");
+    });
+});
+  test("404 article comments not found", () => {
+    return request (app)
+    .get("/api/articles/9001/comments")
+    .expect(404)
+    .then((response) => {
+      expect(response.body.error).toBe("Not found")
+    });
   });
 });
