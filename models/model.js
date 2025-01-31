@@ -11,7 +11,7 @@ return db.query(`SELECT * FROM articles WHERE article_id = $1`, [id])
 .then((result) => {
     const rows = result.rows
     if (rows.length === 0) {
-        return Promise.reject({ message: "I'm sorry, Dave, I'm afraid I can't find that article"});
+        return Promise.reject({ message: "I'm sorry, Dave, I'm afraid I can't find that"});
         } else {
             return rows[0]
         };
@@ -33,4 +33,17 @@ const fetchArticles = () => {
     });
 }
 
-module.exports = { fetchTopics, fetchArticleId, fetchArticles }    
+const fetchComments = (id) => {
+    return db.query(`SELECT * FROM comments WHERE article_id = $1
+                    ORDER BY created_at DESC;`, [id])
+    .then((result) => {
+        const rows = result.rows
+        if (rows.length === 0) {
+            return Promise.reject({ message: "I'm sorry, Dave, I'm afraid I can't find that"});
+        } else {
+            return rows
+        }
+        });
+    };
+module.exports = { fetchTopics, fetchArticleId, fetchArticles, fetchComments }    
+
