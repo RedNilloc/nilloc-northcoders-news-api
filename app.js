@@ -1,7 +1,9 @@
 const express = require("express");
 const app = express();
-const { getEndpoints, getTopics, getArticleId, getArticles, getComments } 
+const { getEndpoints, getTopics, getArticleId, getArticles, getComments, postComments, } 
      = require("./controllers/controller")
+     
+app.use(express.json());
 
 app.get("/api", getEndpoints);
 
@@ -13,14 +15,16 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id/comments", getComments);
 
+app.post("/api/articles/:article_id/comments", postComments);
+
 app.all("*", (req, res) => {
      res.status(404).send({ error: "Endpoint not found"  });
      });
      
 app.use((error, request, response, next) => {
-     if (error.code === "22P02"){
+     if (error.code === "22P02" || error.code === "23502"){
           response.status(400).send({error: "Bad Request"})
-     } else {
+     } else {  
           next(error);
      }
 });
