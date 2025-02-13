@@ -38,12 +38,22 @@ const fetchComments = (id) => {
                     ORDER BY created_at DESC;`, [id])
     .then((result) => {
         const rows = result.rows
-        if (rows.length === 0) {
+        if (id & rows.length === 0) { // this is the issue with the most recent test
+            // advanced error handling, notes 23
             return Promise.reject({ message: "I'm sorry, Dave, I'm afraid I can't find that"});
         } else {
             return rows
         }
         });
     };
-module.exports = { fetchTopics, fetchArticleId, fetchArticles, fetchComments }    
+const addComment = (username, body, id) => {
+    // console.log(body);
+return db.query(`INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`, [username, body, id]) // insert into $article_id? 
+
+.then((result) => {
+    return result.rows[0]
+});
+}
+
+module.exports = { fetchTopics, fetchArticleId, fetchArticles, fetchComments, addComment }    
 
