@@ -143,8 +143,8 @@ describe("GET api/articles/:article_id/comments", () => {
       .expect(200)
       .then((response) => {
         expect(response.body.comment).toEqual([]);
-        });
-    });
+      });
+  });
 });
 describe("POST /api/articles/:article_id/comments", () => {
   test("POST: 201 responds with the posted comment", () => {
@@ -185,5 +185,50 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(response.body.error).toBe("Bad Request");
       });
   });
-  // test for if the userid isn't in the database?
+});
+describe("CORE: PATCH /api/articles/:article_id", () => {
+  test("PATCH: 200 responds with the updated aticle", () => {
+    const voteUpdate = {
+      inc_votes: 20,
+    };
+    return request(app)
+      .patch("/api/articles/3")
+      .send(voteUpdate)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.article).toEqual({
+          article_id: 3,
+          title: "Eight pug gifs that remind me of mitch",
+          topic: "mitch",
+          author: "icellusedkars",
+          body: "some gifs",
+          created_at: "2020-11-03T09:12:00.000Z",
+          votes: 20,
+          article_img_url:
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        });
+      });
+  });
+  test("400 incorrect fields", () => {
+    const badFields = {};
+
+    return request(app)
+      .patch("/api/articles/3")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.error).toBe("Bad Request");
+      });
+  });
+  test("400 field value invalid", () => {
+    const invalidFields = {
+      inc_votes: "I have the power of God and anime on my side",
+    };
+
+    return request(app)
+      .patch("/api/articles/3")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.error).toBe("Bad Request");
+      });
+  });
 });
