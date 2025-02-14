@@ -70,12 +70,27 @@ const addComment = (username, body, id) => {
 };
 
 const updateArticle = (newvote, id) => {
-  return db.query(`UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`,
-    [newvote, id]
-  )
-  .then((result) => {
-    return result.rows[0];
-  });
+  return db
+    .query(
+      `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;`,
+      [newvote, id]
+    )
+    .then((result) => {
+      return result.rows[0];
+    });
+};
+
+const removeComment = (id) => {
+  return db
+    .query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *`, [id])
+    .then((result) => {
+      if(result.rows.length === 0) {
+        return Promise.reject({
+          message: "I'm sorry, Dave, I'm afraid I can't find that",
+        });
+      } else
+      return result.rows[0];
+    });
 };
 
 module.exports = {
@@ -85,4 +100,5 @@ module.exports = {
   fetchComments,
   addComment,
   updateArticle,
+  removeComment,
 };

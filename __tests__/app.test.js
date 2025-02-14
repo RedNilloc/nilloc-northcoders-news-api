@@ -232,3 +232,29 @@ describe("CORE: PATCH /api/articles/:article_id", () => {
       });
   });
 });
+describe("CORE: DELETE /api/comments/:comment_id", () => {
+  test("DELETE: 204 confirms deletion of given comment", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then((response) => {
+        expect(response.body).toEqual({});
+      });
+  });
+  test("404 attempting to delete non-existent resource", () => {
+    return request(app)
+      .delete("/api/comments/525600")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.error).toBe("Not found");
+      });
+  });
+  test("400 attempting to delete resource by invalid id", () => {
+    return request(app)
+      .delete("/api/comments/payyourbloodyrentyoubohemianhipsters")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.error).toBe("Bad Request");
+      });
+  });
+});
