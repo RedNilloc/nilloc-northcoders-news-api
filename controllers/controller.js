@@ -7,7 +7,8 @@ const {
   fetchArticles,
   fetchComments,
   addComment,
-  updateArticle
+  updateArticle,
+  removeComment,
 } = require("../models/model");
 
 const getEndpoints = (request, response) => {
@@ -40,7 +41,7 @@ const getComments = (request, response, next) => {
       response.status(200).send({ comment });
     })
     .catch((err) => {
-      if ((err.status)) {
+      if (err.status) {
         response.status(404).send({ 404: "Oopsie!" });
       } else {
         next(err);
@@ -61,16 +62,27 @@ const postComments = (request, response, next) => {
 };
 
 const patchArticles = (request, response, next) => {
-  const id = request.params.article_id
-  const newVote = request.body.inc_votes
+  const id = request.params.article_id;
+  const newVote = request.body.inc_votes;
   updateArticle(newVote, id)
     .then((article) => {
       response.status(200).send({ article });
     })
     .catch((err) => {
       next(err);
-    }
-)};
+    });
+};
+
+const deleteComments = (request, response, next) => {
+  const id = request.params.comment_id;
+  removeComment(id)
+    .then(() => {
+      response.status(204).send();
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
 
 module.exports = {
   getEndpoints,
@@ -79,5 +91,6 @@ module.exports = {
   getArticles,
   getComments,
   postComments,
-  patchArticles
+  patchArticles,
+  deleteComments,
 };
