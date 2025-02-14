@@ -7,6 +7,7 @@ const {
   fetchArticles,
   fetchComments,
   addComment,
+  updateArticle
 } = require("../models/model");
 
 const getEndpoints = (request, response) => {
@@ -59,6 +60,18 @@ const postComments = (request, response, next) => {
     });
 };
 
+const patchArticles = (request, response, next) => {
+  const id = request.params.article_id
+  const newVote = request.body.inc_votes
+  updateArticle(newVote, id)
+    .then((article) => {
+      response.status(200).send({ article });
+    })
+    .catch((err) => {
+      next(err);
+    }
+)};
+
 module.exports = {
   getEndpoints,
   getTopics,
@@ -66,4 +79,5 @@ module.exports = {
   getArticles,
   getComments,
   postComments,
+  patchArticles
 };
