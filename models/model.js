@@ -84,13 +84,18 @@ const removeComment = (id) => {
   return db
     .query(`DELETE FROM comments WHERE comment_id = $1 RETURNING *`, [id])
     .then((result) => {
-      if(result.rows.length === 0) {
+      if (result.rows.length === 0) {
         return Promise.reject({
           message: "I'm sorry, Dave, I'm afraid I can't find that",
         });
-      } else
-      return result.rows[0];
+      } else return result.rows[0];
     });
+};
+
+const fetchUsers = () => {
+  return db.query(`SELECT * FROM users;`).then((result) => {
+    return result.rows;
+  });
 };
 
 module.exports = {
@@ -101,4 +106,5 @@ module.exports = {
   addComment,
   updateArticle,
   removeComment,
+  fetchUsers,
 };

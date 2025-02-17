@@ -9,6 +9,7 @@ const {
   addComment,
   updateArticle,
   removeComment,
+  fetchUsers,
 } = require("../models/model");
 
 const getEndpoints = (request, response) => {
@@ -84,6 +85,12 @@ const deleteComments = (request, response, next) => {
     });
 };
 
+const getUsers = (request, response, next) => {
+  fetchUsers().then((users) => {
+    response.status(200).send({ users });
+  });
+};
+
 module.exports = {
   getEndpoints,
   getTopics,
@@ -93,4 +100,5 @@ module.exports = {
   postComments,
   patchArticles,
   deleteComments,
+  getUsers,
 };
